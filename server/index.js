@@ -1,11 +1,11 @@
 
+require("dotenv").config();
 const express=require("express");
 const cors = require("cors");
 
 const UserRoute= require('./controllers/UserRoutes');
 const BmiRoute = require('./controllers/BmiRoutes');
 
-require("dotenv").config();
 
 
 const app=express();

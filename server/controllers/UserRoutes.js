@@ -42,8 +42,8 @@ router.post("/login", async (req, res) => {
             if (err) {
                 return res.send({message: "Incorrect Password", status: 'error'})
             } if (result) {
-                const token=jwt.sign({email:user.email,userid:user._id}, secretKey)
-                return res.status(200).json({message: "Login Successfull", status: 'success', user: {_id: user._id, email: user.email, token}});
+                const token=jwt.sign({email:user.email, name:user.name,userid:user._id}, secretKey)
+                return res.status(200).json({message: "Login Successfull", status: 'success', user: {_id: user._id, name: user.name, email: user.email, token}});
             } else{
                 return res.send({message: "invalid password", status: 'error'})
             }
@@ -56,17 +56,9 @@ router.post("/login", async (req, res) => {
 
 router.get('/profile', authenticateToken, (req, res) => {
     // Getting the logged-in user ID from the authentication middleware
-    const userId = req.user.id;
-  
-    User.findById(userId)
-      .then((user) => {
-        if (!user) {
-          res.status(404).json({ message: 'User not found' });
-        } else {
-          res.status(200).json(user);
-        }
-      })
-      .catch((error) => res.status(500).json({ message: 'Failed to fetch profile', error }));
+    const {name} = req.user;
+
+   res.status(200).json(name);
   });
   
 

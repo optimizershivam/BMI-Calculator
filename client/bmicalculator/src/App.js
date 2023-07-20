@@ -1,14 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
+import MainRoutes from './components/MainRoutes';
+import Home from './components/home/Home';
 import BmiCalculator from './components/bmiCalculator/BmiCalculator';
-import SignUp from './components/signup/SignUp';
 
 function App() {
 
   return (
-    <div>
-   {/* <BmiCalculator/> */}
-   <SignUp/>
+    <div className='App'>
+      <Home/>
+   <MainRoutes/>
     </div>
   );
 }

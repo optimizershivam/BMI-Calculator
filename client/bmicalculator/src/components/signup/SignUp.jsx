@@ -37,11 +37,27 @@ const SignUp = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const formData = ({
+      name:data.get('name'),
       email: data.get('email'),
       password: data.get('password'),
     });
+    if(!formData.name)
+    {
+      toast.error("please enter name to signup")
+      return
+    }
+    if(!formData.email)
+    {
+      toast.error("please enter email to signup")
+      return
+    }
+    if(!formData.password)
+    {
+      toast.error("please enter password to signup")
+      return
+    }
     try {
-      const res = await axios.post('https://user-edu-tech.onrender.com/user/signup',formData);
+      const res = await axios.post('http://localhost:8080/auth/signup',formData);
       console.log(res.data);
       if (res.data.status === 'error') {
         toast.error(res.data.message, toastOptions);
@@ -79,26 +95,16 @@ const SignUp = () => {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} >
                 <TextField
                   autoComplete="given-name"
                   required
-                  name="firstName"
+                  name="name"
                   fullWidth
-                  id="firstName"
+                  id="name"
                   label="First Name"
                   autoFocus
                  />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
               </Grid>
               <Grid item xs={12}>
                 <TextField

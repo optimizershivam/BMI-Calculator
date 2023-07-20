@@ -12,7 +12,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import axios from "axios";
 import { useNavigate,Link } from 'react-router-dom';
-import { isLoggedIn } from '../../utils/util';
 import {  ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
@@ -20,7 +19,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 
 
 export default function Login() {
-  let myRef = {}
+
     const toastOptions = {
         position: "top-center",
         autoClose: 3000,
@@ -37,27 +36,32 @@ export default function Login() {
       email: data.get('email'),
       password: data.get('password'),
     };
-
+    if(!formData.email)
+    {
+      toast.error("please enter email to login")
+      return
+    }
+    if(!formData.password)
+    {
+      toast.error("please enter password to login")
+      return
+    }
     try {
-        const res = await axios.post('https://user-edu-tech.onrender.com/user/login',formData);
+        const res = await axios.post('http://localhost:8080/auth/login',formData);
         console.log(res);
         if (res.data.status === 'error') {
             toast.error(res.data.message, toastOptions);
         } else {
             localStorage.setItem('token', JSON.stringify(res.data.user.token))
-            if (isLoggedIn()) {
-                console.log("yes"); 
-                const valid = myRef.current.reportValidity()
-                if(valid) {
-                  if( toast.success('Login Sucesss! You are redirecting to course page',toastOptions))
+               toast.success('Login Sucesss! You are redirecting to home page',toastOptions)
                   {
                       setTimeout(() => {
-                       navigate("/courses")
+                       navigate("/bmiCalculator")
                      }, 3000);
                   }
-                }
+                
                
-            };
+            
         }
       
     } catch (err) {
@@ -67,7 +71,6 @@ export default function Login() {
 
   return (
     <>
-     <Back title='Login Now!' />
    
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
@@ -77,7 +80,6 @@ export default function Login() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://img.freepik.com/free-vector/hand-drawn-realistic-back-school-wallpaper_23-2148583268.jpg)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -104,7 +106,6 @@ export default function Login() {
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
-                inputRef={myRef}
                 required
                 fullWidth
                 id="email"
@@ -116,7 +117,6 @@ export default function Login() {
               <TextField
                 margin="normal"
                 required
-                inputRef={myRef}
                 fullWidth
                 name="password"
                 label="Password"
@@ -133,7 +133,6 @@ export default function Login() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={() => {myRef.current.reportValidity()}}
               >
                 Sign In
               </Button>
